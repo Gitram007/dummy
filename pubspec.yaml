@@ -44,10 +44,7 @@ dev_dependencies:
   build_runner: ^2.4.7
   drift_dev: ^2.14.1
   riverpod_generator: ^2.3.9
-
-  # Linter extensions
-  custom_lint: ^0.5.8
-  riverpod_lint: ^2.3.7
+  # Linting packages have been temporarily removed to resolve build error
 
 flutter:
   uses-material-design: true
