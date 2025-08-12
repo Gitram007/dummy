@@ -1,5 +1,5 @@
-import 'package:inventory_management/src/domain/entities/add_product_params.dart';
-import 'package:inventory_management/src/domain/entities/product.dart';
+import '../entities/add_product_params.dart';
+import '../entities/product.dart';
 
 abstract class IProductRepository {
   Future<List<Product>> getProducts();

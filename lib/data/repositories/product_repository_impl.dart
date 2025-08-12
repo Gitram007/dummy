@@ -1,7 +1,7 @@
-import 'package:inventory_management/src/data/datasources/local/database.dart' as db;
-import 'package:inventory_management/src/domain/entities/add_product_params.dart';
-import 'package:inventory_management/src/domain/entities/product.dart';
-import 'package:inventory_management/src/domain/repositories/product_repository.dart';
+import '../datasources/local/database.dart' as db;
+import '../../domain/entities/add_product_params.dart';
+import '../../domain/entities/product.dart';
+import '../../domain/repositories/product_repository.dart';
 
 class ProductRepositoryImpl implements IProductRepository {
   final db.ProductsDao _productsDao;

@@ -4,7 +4,7 @@
 This document provides a technical overview of the Inventory Management Flutter application. It is intended for developers who will be working on or maintaining the codebase.
 
 ## 2. Architecture
-The project follows the principles of **Clean Architecture**. The code is organized into three main layers to ensure separation of concerns, testability, and maintainability. The layers are located in `lib/src/`:
+The project follows the principles of **Clean Architecture**. The code is organized into three main layers to ensure separation of concerns, testability, and maintainability. The layers are located in `lib/`:
 
 -   **`domain`**: The core of the application. It contains the business logic, entities, and repository interfaces. This layer is independent of any UI or data-source-specific implementation.
     -   `entities/`: Plain Dart objects representing the core models (e.g., `Product`, `Material`).

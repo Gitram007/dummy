@@ -1,6 +1,6 @@
-import 'package:inventory_management/src/data/datasources/remote/api_client.dart';
-import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
-import 'package:inventory_management/src/domain/repositories/product_material_repository.dart';
+import '../datasources/remote/api_client.dart';
+import '../../domain/entities/product_material_mapping.dart';
+import '../../domain/repositories/product_material_repository.dart';
 
 class ProductMaterialRepositoryWebImpl implements IProductMaterialRepository {
   final ApiClient apiClient;

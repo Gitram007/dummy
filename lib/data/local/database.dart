@@ -5,7 +5,7 @@ import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
-part '../database.g.dart';
+part 'database.g.dart';
 
 // Define tables
 class Products extends Table {
@@ -126,6 +126,15 @@ class ProductionLogsDao extends DatabaseAccessor<AppDatabase>
       DateTime start, DateTime end) {
     return (select(productionLogs)
       ..where((tbl) =>
+          tbl.productionDate.isBetween(Variable(start), Variable(end))))
+        .get();
+  }
+
+  Future<List<ProductionLog>> getProductionLogsForProductInDateRange(
+      int productId, DateTime start, DateTime end) {
+    return (select(productionLogs)
+      ..where((tbl) =>
+          tbl.productId.equals(productId) &
           tbl.productionDate.isBetween(Variable(start), Variable(end))))
         .get();
   }

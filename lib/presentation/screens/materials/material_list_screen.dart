@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:inventory_management/src/presentation/providers/application_providers.dart';
-import 'package:inventory_management/src/domain/entities/material.dart' as domain;
+import '../../providers/application_providers.dart';
+import '../../../domain/entities/material.dart' as domain;
 
 class MaterialListScreen extends ConsumerStatefulWidget {
   const MaterialListScreen({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
-import 'package:inventory_management/src/presentation/providers/application_providers.dart';
-import 'package:inventory_management/src/domain/entities/material.dart' as domain;
+import '../../../domain/entities/product_material_mapping.dart';
+import '../../providers/application_providers.dart';
+import '../../../domain/entities/material.dart' as domain;
 
 class ProductMaterialMappingScreen extends ConsumerWidget {
   final int productId;
@@ -115,83 +115,98 @@ class ProductMaterialMappingScreen extends ConsumerWidget {
         ProductMaterialMapping? existingMapping,
       }) {
     final formKey = GlobalKey<FormState>();
-    domain.Material? selectedMaterial = existingMapping != null
-        ? allMaterials.firstWhere((m) => m.id == existingMapping.materialId)
-        : null;
+    domain.Material? initialSelectedMaterial;
+    if (existingMapping != null) {
+      try {
+        initialSelectedMaterial = allMaterials.firstWhere((m) => m.id == existingMapping.materialId);
+      } catch (e) {
+        // Handle case where material is not found, maybe show an error or log it
+        initialSelectedMaterial = null;
+      }
+    }
+
     final quantityController =
     TextEditingController(text: existingMapping?.quantity.toString() ?? '');
 
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(existingMapping != null ? 'Edit Mapping' : 'Add Material'),
-          content: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DropdownButtonFormField<domain.Material>(
-                  value: selectedMaterial,
-                  hint: const Text('Select Material'),
-                  // If editing, disable the dropdown
-                  onChanged: existingMapping != null
-                      ? null
-                      : (material) {
-                    selectedMaterial = material;
-                  },
-                  items: allMaterials
-                      .map((m) => DropdownMenuItem(
-                    value: m,
-                    child: Text(m.name),
-                  ))
-                      .toList(),
-                  validator: (value) =>
-                  value == null ? 'Please select a material' : null,
-                ),
-                TextFormField(
-                  controller: quantityController,
-                  decoration: const InputDecoration(labelText: 'Quantity'),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))
+        domain.Material? selectedMaterial = initialSelectedMaterial;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(existingMapping != null ? 'Edit Mapping' : 'Add Material'),
+              content: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<domain.Material>(
+                      value: selectedMaterial,
+                      hint: const Text('Select Material'),
+                      onChanged: existingMapping != null
+                          ? null
+                          : (material) {
+                        setState(() {
+                          selectedMaterial = material;
+                        });
+                      },
+                      items: allMaterials
+                          .map((m) => DropdownMenuItem(
+                        value: m,
+                        child: Text(m.name),
+                      ))
+                          .toList(),
+                      validator: (value) =>
+                      value == null ? 'Please select a material' : null,
+                    ),
+                    TextFormField(
+                      controller: quantityController,
+                      decoration: const InputDecoration(labelText: 'Quantity'),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a quantity';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Enter a valid number';
+                        }
+                        return null;
+                      },
+                    ),
                   ],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a quantity';
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      if (selectedMaterial != null) {
+                        final mapping = ProductMaterialMapping(
+                          productId: productId,
+                          materialId: selectedMaterial!.id,
+                          quantity: double.parse(quantityController.text),
+                          assignedAt: DateTime.now(),
+                        );
+                        ref
+                            .read(productMaterialRepositoryProvider)
+                            .addMapping(mapping);
+                        Navigator.of(context).pop();
+                      }
                     }
-                    if (double.tryParse(value) == null) {
-                      return 'Enter a valid number';
-                    }
-                    return null;
                   },
+                  child: const Text('Save'),
                 ),
               ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  final mapping = ProductMaterialMapping(
-                    productId: productId,
-                    materialId: selectedMaterial!.id,
-                    quantity: double.parse(quantityController.text),
-                    assignedAt: DateTime.now(), // This will be updated by the db anyway
-                  );
-                  ref
-                      .read(productMaterialRepositoryProvider)
-                      .addMapping(mapping);
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('Save'),
-            ),
-          ],
+            );
+          },
         );
       },
     );

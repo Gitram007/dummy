@@ -1,5 +1,5 @@
-import 'package:inventory_management/src/domain/entities/product.dart';
-import 'package:inventory_management/src/domain/repositories/product_repository.dart';
+import '../entities/product.dart';
+import '../repositories/product_repository.dart';
 
 class GetProducts {
   final IProductRepository repository;

@@ -2,33 +2,33 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Data sources
-import 'package:inventory_management/src/data/datasources/local/database.dart';
-import 'package:inventory_management/src/data/datasources/remote/api_client.dart';
-import 'package:inventory_management/src/data/datasources/remote/mock_api_client.dart';
+import '../../data/datasources/local/database.dart';
+import '../../data/datasources/remote/api_client.dart';
+import '../../data/datasources/remote/mock_api_client.dart';
 
 // Repository Implementations (Mobile)
-import 'package:inventory_management/src/data/repositories/material_repository_impl.dart';
-import 'package:inventory_management/src/data/repositories/product_material_repository_impl.dart';
-import 'package:inventory_management/src/data/repositories/product_repository_impl.dart';
-import 'package:inventory_management/src/data/repositories/production_log_repository_impl.dart';
+import '../../data/repositories/material_repository_impl.dart';
+import '../../data/repositories/product_material_repository_impl.dart';
+import '../../data/repositories/product_repository_impl.dart';
+import '../../data/repositories/production_log_repository_impl.dart';
 
 // Repository Implementations (Web)
-import 'package:inventory_management/src/data/repositories/material_repository_web_impl.dart';
-import 'package:inventory_management/src/data/repositories/product_material_repository_web_impl.dart';
-import 'package:inventory_management/src/data/repositories/product_repository_web_impl.dart';
-import 'package:inventory_management/src/data/repositories/production_log_repository_web_impl.dart';
+import '../../data/repositories/material_repository_web_impl.dart';
+import '../../data/repositories/product_material_repository_web_impl.dart';
+import '../../data/repositories/product_repository_web_impl.dart';
+import '../../data/repositories/production_log_repository_web_impl.dart';
 
 
 // Domain
-import 'package:inventory_management/src/domain/entities/product.dart';
-import 'package:inventory_management/src/domain/entities/material.dart';
-import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
-import 'package:inventory_management/src/domain/repositories/material_repository.dart';
-import 'package:inventory_management/src/domain/repositories/product_material_repository.dart';
-import 'package:inventory_management/src/domain/repositories/product_repository.dart';
-import 'package:inventory_management/src/domain/repositories/production_log_repository.dart';
-import 'package:inventory_management/src/domain/services/report_service.dart';
-import 'package:inventory_management/src/domain/services/export_service.dart';
+import '../../domain/entities/product.dart';
+import '../../domain/entities/material.dart';
+import '../../domain/entities/product_material_mapping.dart';
+import '../../domain/repositories/material_repository.dart';
+import '../../domain/repositories/product_material_repository.dart';
+import '../../domain/repositories/product_repository.dart';
+import '../../domain/repositories/production_log_repository.dart';
+import '../../domain/services/report_service.dart';
+import '../../domain/services/export_service.dart';
 
 // --- DATA SOURCE PROVIDERS ---
 
