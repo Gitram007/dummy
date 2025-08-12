@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:inventory_management/src/domain/entities/add_material_params.dart';
-import 'package:inventory_management/src/domain/entities/material.dart';
-import 'package:inventory_management/src/presentation/providers/application_providers.dart';
+import 'package:inventory_management/domain/entities/add_material_params.dart';
+import 'package:inventory_management/domain/entities/material.dart';
+import 'package:inventory_management/presentation/providers/application_providers.dart';
 
 class AddEditMaterialScreen extends ConsumerWidget {
   final int? materialId;

@@ -1,7 +1,7 @@
-import 'package:inventory_management/src/domain/entities/material.dart';
-import 'package:inventory_management/src/domain/repositories/material_repository.dart';
-import 'package:inventory_management/src/domain/repositories/product_material_repository.dart';
-import 'package:inventory_management/src/domain/repositories/production_log_repository.dart';
+import 'package:inventory_management/domain/entities/material.dart';
+import 'package:inventory_management/domain/repositories/material_repository.dart';
+import 'package:inventory_management/domain/repositories/product_material_repository.dart';
+import 'package:inventory_management/domain/repositories/production_log_repository.dart';
 
 class ReportService {
   final IProductionLogRepository _productionLogRepository;

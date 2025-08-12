@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:inventory_management/src/presentation/providers/application_providers.dart';
-import 'package:inventory_management/src/domain/entities/material.dart' as domain;
+import 'package:inventory_management/presentation/providers/application_providers.dart';
+import 'package:inventory_management/domain/entities/material.dart' as domain;
 import 'package:printing/printing.dart';
 
 enum TimeFrame { today, thisWeek, thisMonth, custom }

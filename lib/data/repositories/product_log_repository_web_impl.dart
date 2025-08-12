@@ -1,7 +1,7 @@
-import 'package:inventory_management/src/data/datasources/remote/api_client.dart';
-import 'package:inventory_management/src/domain/entities/add_production_log_params.dart';
-import 'package:inventory_management/src/domain/entities/production_log.dart';
-import 'package:inventory_management/src/domain/repositories/production_log_repository.dart';
+import 'package:inventory_management/data/datasources/remote/api_client.dart';
+import 'package:inventory_management/domain/entities/add_production_log_params.dart';
+import 'package:inventory_management/domain/entities/production_log.dart';
+import 'package:inventory_management/domain/repositories/production_log_repository.dart';
 
 class ProductionLogRepositoryWebImpl implements IProductionLogRepository {
   final ApiClient apiClient;

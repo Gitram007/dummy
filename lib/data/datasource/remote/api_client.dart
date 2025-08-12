@@ -1,10 +1,10 @@
-import 'package:inventory_management/src/domain/entities/add_material_params.dart';
-import 'package:inventory_management/src/domain/entities/add_product_params.dart';
-import 'package:inventory_management/src/domain/entities/add_production_log_params.dart';
-import 'package:inventory_management/src/domain/entities/material.dart';
-import 'package:inventory_management/src/domain/entities/product.dart';
-import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
-import 'package:inventory_management/src/domain/entities/production_log.dart';
+import 'package:inventory_management/domain/entities/add_material_params.dart';
+import 'package:inventory_management/domain/entities/add_product_params.dart';
+import 'package:inventory_management/domain/entities/add_production_log_params.dart';
+import 'package:inventory_management/domain/entities/material.dart';
+import 'package:inventory_management/domain/entities/product.dart';
+import 'package:inventory_management/domain/entities/product_material_mapping.dart';
+import 'package:inventory_management/domain/entities/production_log.dart';
 
 abstract class ApiClient {
   // Product endpoints

@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventory_management/src/domain/entities/material.dart';
-import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
-import 'package:inventory_management/src/domain/entities/production_log.dart';
-import 'package:inventory_management/src/domain/repositories/material_repository.dart';
-import 'package:inventory_management/src/domain/repositories/product_material_repository.dart';
-import 'package:inventory_management/src/domain/repositories/production_log_repository.dart';
-import 'package:inventory_management/src/domain/services/report_service.dart';
+import 'package:inventory_management/domain/entities/material.dart';
+import 'package:inventory_management/domain/entities/product_material_mapping.dart';
+import 'package:inventory_management/domain/entities/production_log.dart';
+import 'package:inventory_management/domain/repositories/material_repository.dart';
+import 'package:inventory_management/domain/repositories/product_material_repository.dart';
+import 'package:inventory_management/domain/repositories/production_log_repository.dart';
+import 'package:inventory_management/domain/services/report_service.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
-import 'package:inventory_management/src/presentation/providers/application_providers.dart';
-import 'package:inventory_management/src/domain/entities/material.dart' as domain;
+import 'package:inventory_management/domain/entities/product_material_mapping.dart';
+import 'package:inventory_management/presentation/providers/application_providers.dart';
+import 'package:inventory_management/domain/entities/material.dart' as domain;
 
 class ProductMaterialMappingScreen extends ConsumerWidget {
   final int productId;

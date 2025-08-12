@@ -1,7 +1,7 @@
-import 'package:inventory_management/src/data/datasources/local/database.dart' as db;
-import 'package:inventory_management/src/domain/entities/add_production_log_params.dart';
-import 'package:inventory_management/src/domain/entities/production_log.dart';
-import 'package:inventory_management/src/domain/repositories/production_log_repository.dart';
+import 'package:inventory_management/data/datasources/local/database.dart' as db;
+import 'package:inventory_management/domain/entities/add_production_log_params.dart';
+import 'package:inventory_management/domain/entities/production_log.dart';
+import 'package:inventory_management/domain/repositories/production_log_repository.dart';
 
 class ProductionLogRepositoryImpl implements IProductionLogRepository {
   final db.ProductionLogsDao _dao;

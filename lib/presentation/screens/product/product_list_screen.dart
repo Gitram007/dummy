@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:inventory_management/src/presentation/providers/application_providers.dart';
-import 'package:inventory_management/src/domain/entities/product.dart';
+import 'package:inventory_management/presentation/providers/application_providers.dart';
+import 'package:inventory_management/domain/entities/product.dart';
 
 class ProductListScreen extends ConsumerStatefulWidget {
   const ProductListScreen({super.key});

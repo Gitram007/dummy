@@ -1,4 +1,4 @@
-import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
+import 'package:inventory_management/domain/entities/product_material_mapping.dart';
 
 abstract class IProductMaterialRepository {
   Future<List<ProductMaterialMapping>> getMappingsForProduct(int productId);

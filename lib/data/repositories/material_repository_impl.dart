@@ -1,7 +1,7 @@
-import 'package:inventory_management/src/data/datasources/local/database.dart' as db;
-import 'package:inventory_management/src/domain/entities/add_material_params.dart';
-import 'package:inventory_management/src/domain/entities/material.dart';
-import 'package:inventory_management/src/domain/repositories/material_repository.dart';
+import 'package:inventory_management/data/datasources/local/database.dart' as db;
+import 'package:inventory_management/domain/entities/add_material_params.dart';
+import 'package:inventory_management/domain/entities/material.dart';
+import 'package:inventory_management/domain/repositories/material_repository.dart';
 
 class MaterialRepositoryImpl implements IMaterialRepository {
   final db.MaterialsDao _materialsDao;
