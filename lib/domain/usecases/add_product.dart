@@ -1,5 +1,6 @@
 import '../entities/product.dart';
 import '../repositories/product_repository.dart';
+import '../entities/add_product_params.dart';
 
 class AddProduct {
   final IProductRepository repository;
@@ -7,6 +8,10 @@ class AddProduct {
   AddProduct(this.repository);
 
   Future<int> call(Product product) {
-    return repository.addProduct(product);
+    final params = AddProductParams(
+      name: product.name,
+      description: product.description,
+    );
+    return repository.addProduct(params);
   }
 }

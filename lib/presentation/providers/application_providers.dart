@@ -2,21 +2,21 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Data sources
-import '../../data/datasources/local/database.dart';
-import '../../data/datasources/remote/api_client.dart';
-import '../../data/datasources/remote/mock_api_client.dart';
+import '../../data/local/database.dart' as db;
+import '../../data/datasource/remote/api_client.dart';
+import '../../data/datasource/remote/mock_api_client.dart';
 
 // Repository Implementations (Mobile)
 import '../../data/repositories/material_repository_impl.dart';
 import '../../data/repositories/product_material_repository_impl.dart';
 import '../../data/repositories/product_repository_impl.dart';
-import '../../data/repositories/production_log_repository_impl.dart';
+import '../../data/repositories/product_log_repository_impl.dart';
 
 // Repository Implementations (Web)
 import '../../data/repositories/material_repository_web_impl.dart';
 import '../../data/repositories/product_material_repository_web_impl.dart';
 import '../../data/repositories/product_repository_web_impl.dart';
-import '../../data/repositories/production_log_repository_web_impl.dart';
+import '../../data/repositories/product_log_repository_web_impl.dart';
 
 
 // Domain
@@ -33,11 +33,11 @@ import '../../domain/services/export_service.dart';
 // --- DATA SOURCE PROVIDERS ---
 
 // Provider for the local Drift database. Only used on mobile.
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
+final appDatabaseProvider = Provider<db.AppDatabase>((ref) {
   if (kIsWeb) {
     throw UnsupportedError('Drift database is not supported on web.');
   }
-  return AppDatabase();
+  return db.AppDatabase();
 });
 
 // Provider for the REST API client. A singleton mock instance is used.
