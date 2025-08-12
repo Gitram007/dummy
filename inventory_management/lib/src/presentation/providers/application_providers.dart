@@ -1,20 +1,94 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Data sources
 import 'package:inventory_management/src/data/datasources/local/database.dart';
+import 'package:inventory_management/src/data/datasources/remote/api_client.dart';
+import 'package:inventory_management/src/data/datasources/remote/mock_api_client.dart';
+
+// Repository Implementations (Mobile)
 import 'package:inventory_management/src/data/repositories/material_repository_impl.dart';
 import 'package:inventory_management/src/data/repositories/product_material_repository_impl.dart';
 import 'package:inventory_management/src/data/repositories/product_repository_impl.dart';
+import 'package:inventory_management/src/data/repositories/production_log_repository_impl.dart';
+
+// Repository Implementations (Web)
+import 'package:inventory_management/src/data/repositories/material_repository_web_impl.dart';
+import 'package:inventory_management/src/data/repositories/product_material_repository_web_impl.dart';
+import 'package:inventory_management/src/data/repositories/product_repository_web_impl.dart';
+import 'package:inventory_management/src/data/repositories/production_log_repository_web_impl.dart';
+
+
+// Domain
 import 'package:inventory_management/src/domain/entities/product.dart';
 import 'package:inventory_management/src/domain/entities/material.dart';
 import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
 import 'package:inventory_management/src/domain/repositories/material_repository.dart';
 import 'package:inventory_management/src/domain/repositories/product_material_repository.dart';
 import 'package:inventory_management/src/domain/repositories/product_repository.dart';
-import 'package:inventory_management/src/data/repositories/production_log_repository_impl.dart';
 import 'package:inventory_management/src/domain/repositories/production_log_repository.dart';
 import 'package:inventory_management/src/domain/services/report_service.dart';
 import 'package:inventory_management/src/domain/services/export_service.dart';
 
-// --- SERVICES ---
+// --- DATA SOURCE PROVIDERS ---
+
+// Provider for the local Drift database. Only used on mobile.
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
+  if (kIsWeb) {
+    throw UnsupportedError('Drift database is not supported on web.');
+  }
+  return AppDatabase();
+});
+
+// Provider for the REST API client. A singleton mock instance is used.
+final apiClientProvider = Provider<ApiClient>((ref) {
+  return MockApiClient();
+});
+
+
+// --- REPOSITORY PROVIDERS (Conditional) ---
+
+final productRepositoryProvider = Provider<IProductRepository>((ref) {
+  if (kIsWeb) {
+    return ProductRepositoryWebImpl(ref.watch(apiClientProvider));
+  } else {
+    final dao = ref.watch(appDatabaseProvider).productsDao;
+    return ProductRepositoryImpl(dao);
+  }
+});
+
+final materialRepositoryProvider = Provider<IMaterialRepository>((ref) {
+  if (kIsWeb) {
+    return MaterialRepositoryWebImpl(ref.watch(apiClientProvider));
+  } else {
+    final dao = ref.watch(appDatabaseProvider).materialsDao;
+    return MaterialRepositoryImpl(dao);
+  }
+});
+
+final productMaterialRepositoryProvider =
+    Provider<IProductMaterialRepository>((ref) {
+  if (kIsWeb) {
+    return ProductMaterialRepositoryWebImpl(ref.watch(apiClientProvider));
+  } else {
+    final dao = ref.watch(appDatabaseProvider).productMaterialsDao;
+    return ProductMaterialRepositoryImpl(dao);
+  }
+});
+
+final productionLogRepositoryProvider =
+    Provider<IProductionLogRepository>((ref) {
+  if (kIsWeb) {
+    return ProductionLogRepositoryWebImpl(ref.watch(apiClientProvider));
+  } else {
+    final dao = ref.watch(appDatabaseProvider).productionLogsDao;
+    return ProductionLogRepositoryImpl(dao);
+  }
+});
+
+
+// --- SERVICE PROVIDERS ---
+
 final exportServiceProvider = Provider<ExportService>((ref) {
   return ExportService();
 });
@@ -27,90 +101,32 @@ final reportServiceProvider = Provider<ReportService>((ref) {
   );
 });
 
-// --- DATABASE ---
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  // The AppDatabase constructor is singleton-like due to the nature of _openConnection
-  return AppDatabase();
-});
 
-// --- DAOs ---
-final productsDaoProvider = Provider<ProductsDao>((ref) {
-  final db = ref.watch(appDatabaseProvider);
-  return db.productsDao;
-});
+// --- UI-FACING PROVIDERS ---
 
-final materialsDaoProvider = Provider<MaterialsDao>((ref) {
-  final db = ref.watch(appDatabaseProvider);
-  return db.materialsDao;
-});
-
-final productMaterialsDaoProvider = Provider<ProductMaterialsDao>((ref) {
-  final db = ref.watch(appDatabaseProvider);
-  return db.productMaterialsDao;
-});
-
-final productionLogsDaoProvider = Provider<ProductionLogsDao>((ref) {
-  final db = ref.watch(appDatabaseProvider);
-  return db.productionLogsDao;
-});
-
-
-// --- REPOSITORIES ---
-final productRepositoryProvider = Provider<IProductRepository>((ref) {
-  final dao = ref.watch(productsDaoProvider);
-  return ProductRepositoryImpl(dao);
-});
-
-final materialRepositoryProvider = Provider<IMaterialRepository>((ref) {
-  final dao = ref.watch(materialsDaoProvider);
-  return MaterialRepositoryImpl(dao);
-});
-
-final productMaterialRepositoryProvider = Provider<IProductMaterialRepository>((ref) {
-  final dao = ref.watch(productMaterialsDaoProvider);
-  return ProductMaterialRepositoryImpl(dao);
-});
-
-final productionLogRepositoryProvider = Provider<IProductionLogRepository>((ref) {
-  final dao = ref.watch(productionLogsDaoProvider);
-  return ProductionLogRepositoryImpl(dao);
-});
-
-// --- USE CASE PROVIDERS (for UI) ---
-
-// This provider will give the UI a stream of all products.
-// The UI can watch this to get live updates.
 final productsStreamProvider = StreamProvider.autoDispose<List<Product>>((ref) {
-  final productRepository = ref.watch(productRepositoryProvider);
-  return productRepository.watchProducts();
+  return ref.watch(productRepositoryProvider).watchProducts();
 });
 
 final materialsStreamProvider = StreamProvider.autoDispose<List<Material>>((ref) {
-  final materialRepository = ref.watch(materialRepositoryProvider);
-  return materialRepository.watchMaterials();
+  return ref.watch(materialRepositoryProvider).watchMaterials();
 });
-
-// --- MAPPING SCREEN PROVIDERS ---
 
 final productByIdProvider =
     FutureProvider.autoDispose.family<Product, int>((ref, id) {
-  final repo = ref.watch(productRepositoryProvider);
-  return repo.getProductById(id);
+  return ref.watch(productRepositoryProvider).getProductById(id);
 });
 
 final materialByIdProvider =
     FutureProvider.autoDispose.family<Material, int>((ref, id) {
-  final repo = ref.watch(materialRepositoryProvider);
-  return repo.getMaterialById(id);
+  return ref.watch(materialRepositoryProvider).getMaterialById(id);
 });
 
 final productMaterialsStreamProvider =
     StreamProvider.autoDispose.family<List<ProductMaterialMapping>, int>((ref, productId) {
-  final repo = ref.watch(productMaterialRepositoryProvider);
-  return repo.watchMappingsForProduct(productId);
+  return ref.watch(productMaterialRepositoryProvider).watchMappingsForProduct(productId);
 });
 
 final allMaterialsProvider = FutureProvider.autoDispose<List<Material>>((ref) {
-  final repo = ref.watch(materialRepositoryProvider);
-  return repo.getMaterials();
+  return ref.watch(materialRepositoryProvider).getMaterials();
 });
