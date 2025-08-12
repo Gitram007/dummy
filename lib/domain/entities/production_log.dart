@@ -1,30 +1,30 @@
-class ProductMaterialMapping {
+class ProductionLog {
+  final int id;
   final int productId;
-  final int materialId;
-  final double quantity;
-  final DateTime assignedAt;
+  final double quantityProduced;
+  final DateTime productionDate;
 
-  const ProductMaterialMapping({
+  const ProductionLog({
+    required this.id,
     required this.productId,
-    required this.materialId,
-    required this.quantity,
-    required this.assignedAt,
+    required this.quantityProduced,
+    required this.productionDate,
   });
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is ProductMaterialMapping &&
-              runtimeType == other.runtimeType &&
-              productId == other.productId &&
-              materialId == other.materialId &&
-              quantity == other.quantity &&
-              assignedAt == other.assignedAt;
+      other is ProductionLog &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          productId == other.productId &&
+          quantityProduced == other.quantityProduced &&
+          productionDate == other.productionDate;
 
   @override
   int get hashCode =>
+      id.hashCode ^
       productId.hashCode ^
-      materialId.hashCode ^
-      quantity.hashCode ^
-      assignedAt.hashCode;
+      quantityProduced.hashCode ^
+      productionDate.hashCode;
 }
