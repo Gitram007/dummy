@@ -1,4 +1,5 @@
-import '../datasources/local/database.dart' as db;
+import 'package:drift/drift.dart';
+import '../../data/local/database.dart' as db;
 import '../../domain/entities/add_product_params.dart';
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
@@ -19,10 +20,10 @@ class ProductRepositoryImpl implements IProductRepository {
 
   db.ProductsCompanion _toDbUpdate(Product product) {
     return db.ProductsCompanion(
-      id: db.Value(product.id),
-      name: db.Value(product.name),
-      description: db.Value(product.description),
-      createdAt: db.Value(product.createdAt),
+      id: Value(product.id),
+      name: Value(product.name),
+      description: Value(product.description),
+      createdAt: Value(product.createdAt),
     );
   }
 
@@ -30,7 +31,7 @@ class ProductRepositoryImpl implements IProductRepository {
   Future<int> addProduct(AddProductParams params) {
     final companion = db.ProductsCompanion.insert(
       name: params.name,
-      description: db.Value(params.description),
+      description: Value(params.description),
     );
     return _productsDao.insertProduct(companion);
   }

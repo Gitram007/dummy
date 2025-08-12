@@ -1,4 +1,5 @@
-import '../datasources/local/database.dart' as db;
+import 'package:drift/drift.dart';
+import '../local/database.dart' as db;
 import '../../domain/entities/product_material_mapping.dart';
 import '../../domain/repositories/product_material_repository.dart';
 
@@ -18,10 +19,10 @@ class ProductMaterialRepositoryImpl implements IProductMaterialRepository {
 
   db.ProductMaterialsCompanion _toDb(ProductMaterialMapping mapping) {
     return db.ProductMaterialsCompanion(
-      productId: db.Value(mapping.productId),
-      materialId: db.Value(mapping.materialId),
-      quantity: db.Value(mapping.quantity),
-      assignedAt: db.Value(mapping.assignedAt),
+      productId: Value(mapping.productId),
+      materialId: Value(mapping.materialId),
+      quantity: Value(mapping.quantity),
+      assignedAt: Value(mapping.assignedAt),
     );
   }
 

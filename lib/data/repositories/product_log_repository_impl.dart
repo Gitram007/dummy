@@ -1,4 +1,4 @@
-import '../datasources/local/database.dart' as db;
+import '../local/database.dart' as db;
 import '../../domain/entities/add_production_log_params.dart';
 import '../../domain/entities/production_log.dart';
 import '../../domain/repositories/production_log_repository.dart';

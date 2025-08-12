@@ -1,4 +1,4 @@
-import '../datasources/remote/api_client.dart';
+import '../datasource/remote/api_client.dart';
 import '../../domain/entities/product_material_mapping.dart';
 import '../../domain/repositories/product_material_repository.dart';
 

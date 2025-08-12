@@ -1,4 +1,5 @@
-import '../datasources/local/database.dart' as db;
+import 'package:drift/drift.dart';
+import '../local/database.dart' as db;
 import '../../domain/entities/add_material_params.dart';
 import '../../domain/entities/material.dart';
 import '../../domain/repositories/material_repository.dart';
@@ -19,10 +20,10 @@ class MaterialRepositoryImpl implements IMaterialRepository {
 
   db.MaterialsCompanion _toDbUpdate(Material material) {
     return db.MaterialsCompanion(
-      id: db.Value(material.id),
-      name: db.Value(material.name),
-      description: db.Value(material.description),
-      createdAt: db.Value(material.createdAt),
+      id: Value(material.id),
+      name: Value(material.name),
+      description: Value(material.description),
+      createdAt: Value(material.createdAt),
     );
   }
 
@@ -30,7 +31,7 @@ class MaterialRepositoryImpl implements IMaterialRepository {
   Future<int> addMaterial(AddMaterialParams params) {
     final companion = db.MaterialsCompanion.insert(
       name: params.name,
-      description: db.Value(params.description),
+      description: Value(params.description),
     );
     return _materialsDao.insertMaterial(companion);
   }
