@@ -706,20 +706,17 @@ class ProductMaterialsCompanion extends UpdateCompanion<ProductMaterial> {
   final Value<int> materialId;
   final Value<double> quantity;
   final Value<DateTime> assignedAt;
-  final Value<int> rowid;
   const ProductMaterialsCompanion({
     this.productId = const Value.absent(),
     this.materialId = const Value.absent(),
     this.quantity = const Value.absent(),
     this.assignedAt = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   ProductMaterialsCompanion.insert({
     required int productId,
     required int materialId,
     required double quantity,
     this.assignedAt = const Value.absent(),
-    this.rowid = const Value.absent(),
   })  : productId = Value(productId),
         materialId = Value(materialId),
         quantity = Value(quantity);
@@ -728,14 +725,12 @@ class ProductMaterialsCompanion extends UpdateCompanion<ProductMaterial> {
     Expression<int>? materialId,
     Expression<double>? quantity,
     Expression<DateTime>? assignedAt,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (productId != null) 'product_id': productId,
       if (materialId != null) 'material_id': materialId,
       if (quantity != null) 'quantity': quantity,
       if (assignedAt != null) 'assigned_at': assignedAt,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -743,14 +738,12 @@ class ProductMaterialsCompanion extends UpdateCompanion<ProductMaterial> {
       {Value<int>? productId,
         Value<int>? materialId,
         Value<double>? quantity,
-        Value<DateTime>? assignedAt,
-        Value<int>? rowid}) {
+        Value<DateTime>? assignedAt}) {
     return ProductMaterialsCompanion(
       productId: productId ?? this.productId,
       materialId: materialId ?? this.materialId,
       quantity: quantity ?? this.quantity,
       assignedAt: assignedAt ?? this.assignedAt,
-      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -769,9 +762,6 @@ class ProductMaterialsCompanion extends UpdateCompanion<ProductMaterial> {
     if (assignedAt.present) {
       map['assigned_at'] = Variable<DateTime>(assignedAt.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
@@ -781,8 +771,7 @@ class ProductMaterialsCompanion extends UpdateCompanion<ProductMaterial> {
       ..write('productId: $productId, ')
       ..write('materialId: $materialId, ')
       ..write('quantity: $quantity, ')
-      ..write('assignedAt: $assignedAt, ')
-      ..write('rowid: $rowid')
+      ..write('assignedAt: $assignedAt')
       ..write(')'))
         .toString();
   }

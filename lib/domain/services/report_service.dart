@@ -20,8 +20,7 @@ class ReportService {
     required DateTime endDate,
   }) async {
     // 1. Get all production logs for the product in the date range
-    final logs = await _productionLogRepository.getProductionLogs(startDate, endDate);
-    final productLogs = logs.where((log) => log.productId == productId);
+    final productLogs = await _productionLogRepository.getProductionLogsForProduct(productId, startDate, endDate);
 
     if (productLogs.isEmpty) {
       return {};

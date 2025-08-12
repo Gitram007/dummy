@@ -29,4 +29,5 @@ abstract class ApiClient {
   // Production Log endpoints
   Future<void> addProductionLog(AddProductionLogParams params);
   Future<List<ProductionLog>> getProductionLogs(DateTime start, DateTime end);
+  Future<List<ProductionLog>> getProductionLogsForProduct(int productId, DateTime start, DateTime end);
 }

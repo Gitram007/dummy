@@ -17,4 +17,9 @@ class ProductionLogRepositoryWebImpl implements IProductionLogRepository {
   Future<List<ProductionLog>> getProductionLogs(DateTime start, DateTime end) {
     return apiClient.getProductionLogs(start, end);
   }
+
+  @override
+  Future<List<ProductionLog>> getProductionLogsForProduct(int productId, DateTime start, DateTime end) {
+    return apiClient.getProductionLogsForProduct(productId, start, end);
+  }
 }

@@ -40,10 +40,9 @@ void main() {
       final startDate = DateTime(2023, 1, 1);
       final endDate = DateTime(2023, 1, 31);
 
-      final productionLogs = [
+      final productionLogsForProduct = [
         ProductionLog(id: 1, productId: 1, quantityProduced: 10, productionDate: DateTime(2023, 1, 10)),
         ProductionLog(id: 2, productId: 1, quantityProduced: 5, productionDate: DateTime(2023, 1, 15)),
-        ProductionLog(id: 3, productId: 2, quantityProduced: 20, productionDate: DateTime(2023, 1, 12)), // Different product
       ];
 
       final materialMappings = [
@@ -56,8 +55,8 @@ void main() {
         Material(id: 102, name: 'Plate', description: 'A plate', createdAt: DateTime.now()),
       ];
 
-      when(mockProductionLogRepository.getProductionLogs(startDate, endDate))
-          .thenAnswer((_) async => productionLogs);
+      when(mockProductionLogRepository.getProductionLogsForProduct(productId, startDate, endDate))
+          .thenAnswer((_) async => productionLogsForProduct);
       when(mockProductMaterialRepository.getMappingsForProduct(productId))
           .thenAnswer((_) async => materialMappings);
       when(mockMaterialRepository.getMaterials())
