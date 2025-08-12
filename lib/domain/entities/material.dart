@@ -27,5 +27,19 @@ class Material {
       name.hashCode ^
       description.hashCode ^
       createdAt.hashCode;
+
+  Material copyWith({
+    int? id,
+    String? name,
+    String? description,
+    DateTime? createdAt,
+  }) {
+    return Material(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }
 

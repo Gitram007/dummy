@@ -32,4 +32,10 @@ class ProductionLogRepositoryImpl implements IProductionLogRepository {
     final dbLogs = await _dao.getProductionLogsInDateRange(start, end);
     return dbLogs.map(_fromDb).toList();
   }
+
+  @override
+  Future<List<ProductionLog>> getProductionLogsForProduct(int productId, DateTime start, DateTime end) async {
+    final dbLogs = await _dao.getProductionLogsForProductInDateRange(productId, start, end);
+    return dbLogs.map(_fromDb).toList();
+  }
 }

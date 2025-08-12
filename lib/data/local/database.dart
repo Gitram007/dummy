@@ -129,6 +129,15 @@ class ProductionLogsDao extends DatabaseAccessor<AppDatabase>
           tbl.productionDate.isBetween(Variable(start), Variable(end))))
         .get();
   }
+
+  Future<List<ProductionLog>> getProductionLogsForProductInDateRange(
+      int productId, DateTime start, DateTime end) {
+    return (select(productionLogs)
+      ..where((tbl) =>
+          tbl.productId.equals(productId) &
+          tbl.productionDate.isBetween(Variable(start), Variable(end))))
+        .get();
+  }
 }
 
 LazyDatabase _openConnection() {

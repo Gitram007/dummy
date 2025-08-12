@@ -68,7 +68,7 @@ class MockApiClient implements ApiClient {
   @override
   Future<Product> getProduct(int id) async {
     await _simulateNetworkDelay();
-    return _products.firstWhere((p) => p.id == id);
+    return _products.firstWhere((p) => p.id == id, orElse: () => throw Exception('Product with id $id not found'));
   }
 
   @override
@@ -84,6 +84,12 @@ class MockApiClient implements ApiClient {
   }
 
   @override
+  Future<List<ProductionLog>> getProductionLogsForProduct(int productId, DateTime start, DateTime end) async {
+    await _simulateNetworkDelay();
+    return _logs.where((l) => l.productId == productId && l.productionDate.isAfter(start) && l.productionDate.isBefore(end)).toList();
+  }
+
+  @override
   Future<void> removeMapping(int productId, int materialId) async {
     await _simulateNetworkDelay();
     _mappings.removeWhere((m) => m.productId == productId && m.materialId == materialId);
@@ -95,8 +101,10 @@ class MockApiClient implements ApiClient {
     final index = _products.indexWhere((p) => p.id == product.id);
     if (index != -1) {
       _products[index] = product;
+      return product;
+    } else {
+      throw Exception('Product with id ${product.id} not found');
     }
-    return product;
   }
 
   // --- Materials (Not fully implemented for brevity, follows same pattern) ---
@@ -122,7 +130,7 @@ class MockApiClient implements ApiClient {
   @override
   Future<Material> getMaterial(int id) async {
     await _simulateNetworkDelay();
-    return _materials.firstWhere((m) => m.id == id);
+    return _materials.firstWhere((m) => m.id == id, orElse: () => throw Exception('Material with id $id not found'));
   }
 
   @override
@@ -137,7 +145,9 @@ class MockApiClient implements ApiClient {
     final index = _materials.indexWhere((m) => m.id == material.id);
     if (index != -1) {
       _materials[index] = material;
+      return material;
+    } else {
+      throw Exception('Material with id ${material.id} not found');
     }
-    return material;
   }
 }
