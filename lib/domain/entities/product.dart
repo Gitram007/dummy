@@ -27,4 +27,18 @@ class Product {
       name.hashCode ^
       description.hashCode ^
       createdAt.hashCode;
+
+  Product copyWith({
+    int? id,
+    String? name,
+    String? description,
+    DateTime? createdAt,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

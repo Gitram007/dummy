@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventory_management/src/domain/entities/material.dart';
-import 'package:inventory_management/src/domain/entities/product_material_mapping.dart';
-import 'package:inventory_management/src/domain/entities/production_log.dart';
-import 'package:inventory_management/src/domain/repositories/material_repository.dart';
-import 'package:inventory_management/src/domain/repositories/product_material_repository.dart';
-import 'package:inventory_management/src/domain/repositories/production_log_repository.dart';
-import 'package:inventory_management/src/domain/services/report_service.dart';
+import 'package:inventory_management/domain/entities/material.dart';
+import 'package:inventory_management/domain/entities/product_material_mapping.dart';
+import 'package:inventory_management/domain/entities/production_log.dart';
+import 'package:inventory_management/domain/repositories/material_repository.dart';
+import 'package:inventory_management/domain/repositories/product_material_repository.dart';
+import 'package:inventory_management/domain/repositories/production_log_repository.dart';
+import 'package:inventory_management/domain/services/report_service.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -40,10 +40,9 @@ void main() {
       final startDate = DateTime(2023, 1, 1);
       final endDate = DateTime(2023, 1, 31);
 
-      final productionLogs = [
+      final productionLogsForProduct = [
         ProductionLog(id: 1, productId: 1, quantityProduced: 10, productionDate: DateTime(2023, 1, 10)),
         ProductionLog(id: 2, productId: 1, quantityProduced: 5, productionDate: DateTime(2023, 1, 15)),
-        ProductionLog(id: 3, productId: 2, quantityProduced: 20, productionDate: DateTime(2023, 1, 12)), // Different product
       ];
 
       final materialMappings = [
@@ -56,8 +55,8 @@ void main() {
         Material(id: 102, name: 'Plate', description: 'A plate', createdAt: DateTime.now()),
       ];
 
-      when(mockProductionLogRepository.getProductionLogs(startDate, endDate))
-          .thenAnswer((_) async => productionLogs);
+      when(mockProductionLogRepository.getProductionLogsForProduct(productId, startDate, endDate))
+          .thenAnswer((_) async => productionLogsForProduct);
       when(mockProductMaterialRepository.getMappingsForProduct(productId))
           .thenAnswer((_) async => materialMappings);
       when(mockMaterialRepository.getMaterials())

@@ -1,7 +1,7 @@
-import 'package:inventory_management/src/data/datasources/remote/api_client.dart';
-import 'package:inventory_management/src/domain/entities/add_product_params.dart';
-import 'package:inventory_management/src/domain/entities/product.dart';
-import 'package:inventory_management/src/domain/repositories/product_repository.dart';
+import 'package:inventory_management/data/datasources/remote/api_client.dart';
+import 'package:inventory_management/domain/entities/add_product_params.dart';
+import 'package:inventory_management/domain/entities/product.dart';
+import 'package:inventory_management/domain/repositories/product_repository.dart';
 
 class ProductRepositoryWebImpl implements IProductRepository {
   final ApiClient apiClient;

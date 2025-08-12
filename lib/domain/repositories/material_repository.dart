@@ -1,5 +1,5 @@
-import 'package:inventory_management/src/domain/entities/add_material_params.dart';
-import 'package:inventory_management/src/domain/entities/material.dart';
+import 'package:inventory_management/domain/entities/add_material_params.dart';
+import 'package:inventory_management/domain/entities/material.dart';
 
 abstract class IMaterialRepository {
   Future<List<Material>> getMaterials();
