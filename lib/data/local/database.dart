@@ -5,7 +5,7 @@ import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
-part '../database.g.dart';
+part 'database.g.dart';
 
 // Define tables
 class Products extends Table {
