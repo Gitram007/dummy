@@ -5,12 +5,12 @@ import './screens/mapping/product_material_mapping_screen.dart';
 import './screens/mapping/product_selection_screen.dart';
 import './screens/materials/add_edit_material_screen.dart';
 import './screens/materials/material_list_screen.dart';
-import './screens/products/add_edit_product_screen.dart';
-import './screens/products/product_list_screen.dart';
-import './screens/reporting/log_production_screen.dart';
-import './screens/reporting/material_usage_by_product_screen.dart';
-import './screens/reporting/overall_material_usage_screen.dart';
-import './screens/reporting/reports_home_screen.dart';
+import './screens/product/add_edit_product_screen.dart';
+import './screens/product/product_list_screen.dart';
+import './screens/report/log_production_screen.dart';
+import './screens/report/material_usage_by_product_screen.dart';
+import './screens/report/overall_material_useage_screen.dart';
+import './screens/report/reports_home_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

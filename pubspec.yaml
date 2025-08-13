@@ -49,7 +49,7 @@ dev_dependencies:
   riverpod_generator: ^2.3.9
   # Linting packages have been temporarily removed to resolve build error
   riverpod_lint: ^2.6.5
-mockito: ^5.4.4
+  mockito: ^5.4.4
 
 flutter:
   uses-material-design: true

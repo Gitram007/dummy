@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/add_material_params.dart';
-import '../../../domain/entities/material.dart';
+import '../../../domain/entities/material.dart' as domain;
 import '../../providers/application_providers.dart';
 
 class AddEditMaterialScreen extends ConsumerWidget {
@@ -33,7 +33,7 @@ class AddEditMaterialScreen extends ConsumerWidget {
 }
 
 class _AddEditMaterialForm extends ConsumerStatefulWidget {
-  final Material? material;
+  final domain.Material? material;
 
   const _AddEditMaterialForm({this.material});
 
