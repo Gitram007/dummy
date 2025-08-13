@@ -9,7 +9,7 @@ class MaterialRepositoryImpl implements IMaterialRepository {
 
   MaterialRepositoryImpl(this._materialsDao);
 
-  Material _fromDb(db.Material dbMaterial) {
+  Material _fromDb(db.MaterialItem dbMaterial) {
     return Material(
       id: dbMaterial.id,
       name: dbMaterial.name,

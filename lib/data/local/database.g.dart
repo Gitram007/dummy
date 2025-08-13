@@ -3,6 +3,23 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
+mixin _$ProductsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $ProductsTable get products => attachedDatabase.products;
+}
+mixin _$MaterialsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $MaterialsTable get materials => attachedDatabase.materials;
+}
+mixin _$ProductMaterialsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $ProductsTable get products => attachedDatabase.products;
+  $MaterialsTable get materials => attachedDatabase.materials;
+  $ProductMaterialsTable get productMaterials =>
+      attachedDatabase.productMaterials;
+}
+mixin _$ProductionLogsDaoMixin on DatabaseAccessor<AppDatabase> {
+  $ProductsTable get products => attachedDatabase.products;
+  $ProductionLogsTable get productionLogs => attachedDatabase.productionLogs;
+}
+
 class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -269,7 +286,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
 }
 
 class $MaterialsTable extends Materials
-    with TableInfo<$MaterialsTable, Material> {
+    with TableInfo<$MaterialsTable, MaterialItem> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -313,7 +330,7 @@ class $MaterialsTable extends Materials
   String get actualTableName => $name;
   static const String $name = 'materials';
   @override
-  VerificationContext validateIntegrity(Insertable<Material> instance,
+  VerificationContext validateIntegrity(Insertable<MaterialItem> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -342,9 +359,9 @@ class $MaterialsTable extends Materials
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Material map(Map<String, dynamic> data, {String? tablePrefix}) {
+  MaterialItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Material(
+    return MaterialItem(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
@@ -362,12 +379,12 @@ class $MaterialsTable extends Materials
   }
 }
 
-class Material extends DataClass implements Insertable<Material> {
+class MaterialItem extends DataClass implements Insertable<MaterialItem> {
   final int id;
   final String name;
   final String? description;
   final DateTime createdAt;
-  const Material(
+  const MaterialItem(
       {required this.id,
       required this.name,
       this.description,
@@ -395,10 +412,10 @@ class Material extends DataClass implements Insertable<Material> {
     );
   }
 
-  factory Material.fromJson(Map<String, dynamic> json,
+  factory MaterialItem.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Material(
+    return MaterialItem(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String?>(json['description']),
@@ -416,19 +433,19 @@ class Material extends DataClass implements Insertable<Material> {
     };
   }
 
-  Material copyWith(
+  MaterialItem copyWith(
           {int? id,
           String? name,
           Value<String?> description = const Value.absent(),
           DateTime? createdAt}) =>
-      Material(
+      MaterialItem(
         id: id ?? this.id,
         name: name ?? this.name,
         description: description.present ? description.value : this.description,
         createdAt: createdAt ?? this.createdAt,
       );
-  Material copyWithCompanion(MaterialsCompanion data) {
-    return Material(
+  MaterialItem copyWithCompanion(MaterialsCompanion data) {
+    return MaterialItem(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       description:
@@ -439,7 +456,7 @@ class Material extends DataClass implements Insertable<Material> {
 
   @override
   String toString() {
-    return (StringBuffer('Material(')
+    return (StringBuffer('MaterialItem(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('description: $description, ')
@@ -453,14 +470,14 @@ class Material extends DataClass implements Insertable<Material> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Material &&
+      (other is MaterialItem &&
           other.id == this.id &&
           other.name == this.name &&
           other.description == this.description &&
           other.createdAt == this.createdAt);
 }
 
-class MaterialsCompanion extends UpdateCompanion<Material> {
+class MaterialsCompanion extends UpdateCompanion<MaterialItem> {
   final Value<int> id;
   final Value<String> name;
   final Value<String?> description;
@@ -477,7 +494,7 @@ class MaterialsCompanion extends UpdateCompanion<Material> {
     this.description = const Value.absent(),
     this.createdAt = const Value.absent(),
   }) : name = Value(name);
-  static Insertable<Material> custom({
+  static Insertable<MaterialItem> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? description,
@@ -841,8 +858,8 @@ class $ProductionLogsTable extends ProductionLogs
       'product_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES products (id)'));
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES products (id) ON DELETE CASCADE'));
   static const VerificationMeta _quantityProducedMeta =
       const VerificationMeta('quantityProduced');
   @override
@@ -1128,6 +1145,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.delete),
             result: [
               TableUpdate('product_materials', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('products',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('production_logs', kind: UpdateKind.delete),
             ],
           ),
         ],
@@ -1456,7 +1480,7 @@ typedef $$MaterialsTableUpdateCompanionBuilder = MaterialsCompanion Function({
 });
 
 final class $$MaterialsTableReferences
-    extends BaseReferences<_$AppDatabase, $MaterialsTable, Material> {
+    extends BaseReferences<_$AppDatabase, $MaterialsTable, MaterialItem> {
   $$MaterialsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$ProductMaterialsTable, List<ProductMaterial>>
@@ -1588,14 +1612,14 @@ class $$MaterialsTableAnnotationComposer
 class $$MaterialsTableTableManager extends RootTableManager<
     _$AppDatabase,
     $MaterialsTable,
-    Material,
+    MaterialItem,
     $$MaterialsTableFilterComposer,
     $$MaterialsTableOrderingComposer,
     $$MaterialsTableAnnotationComposer,
     $$MaterialsTableCreateCompanionBuilder,
     $$MaterialsTableUpdateCompanionBuilder,
-    (Material, $$MaterialsTableReferences),
-    Material,
+    (MaterialItem, $$MaterialsTableReferences),
+    MaterialItem,
     PrefetchHooks Function({bool productMaterialsRefs})> {
   $$MaterialsTableTableManager(_$AppDatabase db, $MaterialsTable table)
       : super(TableManagerState(
@@ -1647,7 +1671,7 @@ class $$MaterialsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (productMaterialsRefs)
-                    await $_getPrefetchedData<Material, $MaterialsTable,
+                    await $_getPrefetchedData<MaterialItem, $MaterialsTable,
                             ProductMaterial>(
                         currentTable: table,
                         referencedTable: $$MaterialsTableReferences
@@ -1669,14 +1693,14 @@ class $$MaterialsTableTableManager extends RootTableManager<
 typedef $$MaterialsTableProcessedTableManager = ProcessedTableManager<
     _$AppDatabase,
     $MaterialsTable,
-    Material,
+    MaterialItem,
     $$MaterialsTableFilterComposer,
     $$MaterialsTableOrderingComposer,
     $$MaterialsTableAnnotationComposer,
     $$MaterialsTableCreateCompanionBuilder,
     $$MaterialsTableUpdateCompanionBuilder,
-    (Material, $$MaterialsTableReferences),
-    Material,
+    (MaterialItem, $$MaterialsTableReferences),
+    MaterialItem,
     PrefetchHooks Function({bool productMaterialsRefs})>;
 typedef $$ProductMaterialsTableCreateCompanionBuilder
     = ProductMaterialsCompanion Function({
@@ -2290,21 +2314,4 @@ class $AppDatabaseManager {
       $$ProductMaterialsTableTableManager(_db, _db.productMaterials);
   $$ProductionLogsTableTableManager get productionLogs =>
       $$ProductionLogsTableTableManager(_db, _db.productionLogs);
-}
-
-mixin _$ProductsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ProductsTable get products => attachedDatabase.products;
-}
-mixin _$MaterialsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $MaterialsTable get materials => attachedDatabase.materials;
-}
-mixin _$ProductMaterialsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ProductsTable get products => attachedDatabase.products;
-  $MaterialsTable get materials => attachedDatabase.materials;
-  $ProductMaterialsTable get productMaterials =>
-      attachedDatabase.productMaterials;
-}
-mixin _$ProductionLogsDaoMixin on DatabaseAccessor<AppDatabase> {
-  $ProductsTable get products => attachedDatabase.products;
-  $ProductionLogsTable get productionLogs => attachedDatabase.productionLogs;
 }
