@@ -83,12 +83,18 @@ class _MaterialListScreenState extends ConsumerState<MaterialListScreen> {
                     final material = filteredMaterials[index];
                     return ListTile(
                       title: Text(material.name),
-                      subtitle: material.description != null &&
-                          material.description!.isNotEmpty
-                          ? Text(material.description!)
-                          : null,
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
+                      subtitle: Text('Quantity: ${material.quantity} ${material.unit}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              context.go('/materials/${material.id}/edit');
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
                         onPressed: () async {
                           final confirmed = await showDialog<bool>(
                             context: context,

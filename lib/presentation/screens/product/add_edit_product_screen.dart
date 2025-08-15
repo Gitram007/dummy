@@ -44,7 +44,6 @@ class _AddEditProductForm extends ConsumerStatefulWidget {
 class _AddEditProductFormState extends ConsumerState<_AddEditProductForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
-  late final TextEditingController _descriptionController;
 
   bool get _isEditMode => widget.product != null;
 
@@ -52,14 +51,11 @@ class _AddEditProductFormState extends ConsumerState<_AddEditProductForm> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.product?.name ?? '');
-    _descriptionController =
-        TextEditingController(text: widget.product?.description ?? '');
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -70,13 +66,11 @@ class _AddEditProductFormState extends ConsumerState<_AddEditProductForm> {
         if (_isEditMode) {
           final updatedProduct = widget.product!.copyWith(
             name: _nameController.text,
-            description: _descriptionController.text,
           );
           await repository.updateProduct(updatedProduct);
         } else {
           final newProductParams = AddProductParams(
             name: _nameController.text,
-            description: _descriptionController.text,
           );
           await repository.addProduct(newProductParams);
         }
@@ -114,11 +108,6 @@ class _AddEditProductFormState extends ConsumerState<_AddEditProductForm> {
                   }
                   return null;
                 },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(labelText: 'Description'),
               ),
               const SizedBox(height: 32),
               ElevatedButton(

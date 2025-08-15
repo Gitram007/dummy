@@ -90,12 +90,12 @@ class _OverallMaterialUsageScreenState
 
     final exportService = ref.read(exportServiceProvider);
     const title = 'Overall Material Usage Report';
-    final headers = ['Material Name', 'Description', 'Total Quantity Used'];
+    final headers = ['Material Name', 'Total Quantity Used', 'Unit'];
     final data = _reportData!.entries.map((entry) {
       return [
         entry.key.name,
-        entry.key.description ?? '',
         entry.value.toStringAsFixed(2),
+        entry.key.unit,
       ];
     }).toList();
 

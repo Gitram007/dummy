@@ -45,7 +45,8 @@ class _AddEditMaterialForm extends ConsumerStatefulWidget {
 class _AddEditMaterialFormState extends ConsumerState<_AddEditMaterialForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
-  late final TextEditingController _descriptionController;
+  late final TextEditingController _quantityController;
+  late final TextEditingController _unitController;
 
   bool get _isEditMode => widget.material != null;
 
@@ -53,14 +54,16 @@ class _AddEditMaterialFormState extends ConsumerState<_AddEditMaterialForm> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.material?.name ?? '');
-    _descriptionController =
-        TextEditingController(text: widget.material?.description ?? '');
+    _quantityController = TextEditingController(
+        text: widget.material?.quantity.toString() ?? '0.0');
+    _unitController = TextEditingController(text: widget.material?.unit ?? '');
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _descriptionController.dispose();
+    _quantityController.dispose();
+    _unitController.dispose();
     super.dispose();
   }
 
@@ -71,13 +74,15 @@ class _AddEditMaterialFormState extends ConsumerState<_AddEditMaterialForm> {
         if (_isEditMode) {
           final updatedMaterial = widget.material!.copyWith(
             name: _nameController.text,
-            description: _descriptionController.text,
+            quantity: double.tryParse(_quantityController.text) ?? 0.0,
+            unit: _unitController.text,
           );
           await repository.updateMaterial(updatedMaterial);
         } else {
           final newMaterialParams = AddMaterialParams(
             name: _nameController.text,
-            description: _descriptionController.text,
+            quantity: double.tryParse(_quantityController.text) ?? 0.0,
+            unit: _unitController.text,
           );
           await repository.addMaterial(newMaterialParams);
         }
@@ -118,8 +123,29 @@ class _AddEditMaterialFormState extends ConsumerState<_AddEditMaterialForm> {
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(labelText: 'Description'),
+                controller: _quantityController,
+                decoration: const InputDecoration(labelText: 'Quantity'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a quantity';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Please enter a valid number';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _unitController,
+                decoration: const InputDecoration(labelText: 'Unit'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a unit';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 32),
               ElevatedButton(

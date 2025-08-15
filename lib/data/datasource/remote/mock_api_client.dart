@@ -26,7 +26,6 @@ class MockApiClient implements ApiClient {
     final newProduct = Product(
       id: ++_product_id_counter,
       name: params.name,
-      description: params.description,
       createdAt: DateTime.now(),
     );
     _products.add(newProduct);
@@ -114,7 +113,8 @@ class MockApiClient implements ApiClient {
     final newMaterial = Material(
       id: ++_material_id_counter,
       name: params.name,
-      description: params.description,
+      quantity: params.quantity,
+      unit: params.unit,
       createdAt: DateTime.now(),
     );
     _materials.add(newMaterial);

@@ -30,9 +30,6 @@ class ProductSelectionScreen extends ConsumerWidget {
               final product = products[index];
               return ListTile(
                 title: Text(product.name),
-                subtitle: product.description != null && product.description!.isNotEmpty
-                    ? Text(product.description!)
-                    : null,
                 onTap: () {
                   context.go('/mappings/${product.id}');
                 },

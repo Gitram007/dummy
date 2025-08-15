@@ -83,10 +83,6 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
                     final product = filteredProducts[index];
                     return ListTile(
                       title: Text(product.name),
-                      subtitle: product.description != null &&
-                          product.description!.isNotEmpty
-                          ? Text(product.description!)
-                          : null,
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
