@@ -13,7 +13,6 @@ class ProductRepositoryImpl implements IProductRepository {
     return Product(
       id: dbProduct.id,
       name: dbProduct.name,
-      description: dbProduct.description,
       createdAt: dbProduct.createdAt,
     );
   }
@@ -22,7 +21,6 @@ class ProductRepositoryImpl implements IProductRepository {
     return db.ProductsCompanion(
       id: Value(product.id),
       name: Value(product.name),
-      description: Value(product.description),
       createdAt: Value(product.createdAt),
     );
   }
@@ -31,7 +29,6 @@ class ProductRepositoryImpl implements IProductRepository {
   Future<int> addProduct(AddProductParams params) {
     final companion = db.ProductsCompanion.insert(
       name: params.name,
-      description: Value(params.description),
     );
     return _productsDao.insertProduct(companion);
   }

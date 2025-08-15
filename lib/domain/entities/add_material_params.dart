@@ -1,9 +1,11 @@
 class AddMaterialParams {
   final String name;
-  final String? description;
+  final double quantity;
+  final String unit;
 
   const AddMaterialParams({
     required this.name,
-    this.description,
+    required this.quantity,
+    required this.unit,
   });
 }

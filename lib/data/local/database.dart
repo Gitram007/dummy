@@ -8,7 +8,6 @@ part 'database.g.dart';
 class Products extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 100)();
-  TextColumn get description => text().nullable()();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
@@ -16,7 +15,8 @@ class Products extends Table {
 class Materials extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 100)();
-  TextColumn get description => text().nullable()();
+  RealColumn get quantity => real().withDefault(const Constant(0.0))();
+  TextColumn get unit => text().withLength(min: 1, max: 20)();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 

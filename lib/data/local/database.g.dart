@@ -42,12 +42,6 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
-  @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -57,7 +51,7 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
   @override
-  List<GeneratedColumn> get $columns => [id, name, description, createdAt];
+  List<GeneratedColumn> get $columns => [id, name, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -77,12 +71,6 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('description')) {
-      context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
-    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -100,8 +88,6 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -116,21 +102,13 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
 class Product extends DataClass implements Insertable<Product> {
   final int id;
   final String name;
-  final String? description;
   final DateTime createdAt;
-  const Product(
-      {required this.id,
-      required this.name,
-      this.description,
-      required this.createdAt});
+  const Product({required this.id, required this.name, required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
-    if (!nullToAbsent || description != null) {
-      map['description'] = Variable<String>(description);
-    }
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -139,9 +117,6 @@ class Product extends DataClass implements Insertable<Product> {
     return ProductsCompanion(
       id: Value(id),
       name: Value(name),
-      description: description == null && nullToAbsent
-          ? const Value.absent()
-          : Value(description),
       createdAt: Value(createdAt),
     );
   }
@@ -152,7 +127,6 @@ class Product extends DataClass implements Insertable<Product> {
     return Product(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      description: serializer.fromJson<String?>(json['description']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -162,28 +136,20 @@ class Product extends DataClass implements Insertable<Product> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'description': serializer.toJson<String?>(description),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
-  Product copyWith(
-          {int? id,
-          String? name,
-          Value<String?> description = const Value.absent(),
-          DateTime? createdAt}) =>
+  Product copyWith({int? id, String? name, DateTime? createdAt}) =>
       Product(
         id: id ?? this.id,
         name: name ?? this.name,
-        description: description.present ? description.value : this.description,
         createdAt: createdAt ?? this.createdAt,
       );
   Product copyWithCompanion(ProductsCompanion data) {
     return Product(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
-      description:
-          data.description.present ? data.description.value : this.description,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -193,64 +159,53 @@ class Product extends DataClass implements Insertable<Product> {
     return (StringBuffer('Product(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('description: $description, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, description, createdAt);
+  int get hashCode => Object.hash(id, name, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Product &&
           other.id == this.id &&
           other.name == this.name &&
-          other.description == this.description &&
           other.createdAt == this.createdAt);
 }
 
 class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<int> id;
   final Value<String> name;
-  final Value<String?> description;
   final Value<DateTime> createdAt;
   const ProductsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    this.description = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
   ProductsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
-    this.description = const Value.absent(),
     this.createdAt = const Value.absent(),
   }) : name = Value(name);
   static Insertable<Product> custom({
     Expression<int>? id,
     Expression<String>? name,
-    Expression<String>? description,
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
-      if (description != null) 'description': description,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
 
   ProductsCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? name,
-      Value<String?>? description,
-      Value<DateTime>? createdAt}) {
+      {Value<int>? id, Value<String>? name, Value<DateTime>? createdAt}) {
     return ProductsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
-      description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -264,9 +219,6 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
-    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -278,7 +230,6 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     return (StringBuffer('ProductsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('description: $description, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -308,12 +259,22 @@ class $MaterialsTable extends Materials
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  static const VerificationMeta _descriptionMeta =
-      const VerificationMeta('description');
+  static const VerificationMeta _quantityMeta =
+      const VerificationMeta('quantity');
   @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+  late final GeneratedColumn<double> quantity = GeneratedColumn<double>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
+  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
+  @override
+  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
+      'unit', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -323,7 +284,7 @@ class $MaterialsTable extends Materials
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
   @override
-  List<GeneratedColumn> get $columns => [id, name, description, createdAt];
+  List<GeneratedColumn> get $columns => [id, name, quantity, unit, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -343,11 +304,15 @@ class $MaterialsTable extends Materials
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('description')) {
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    }
+    if (data.containsKey('unit')) {
       context.handle(
-          _descriptionMeta,
-          description.isAcceptableOrUnknown(
-              data['description']!, _descriptionMeta));
+          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
+    } else if (isInserting) {
+      context.missing(_unitMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -366,8 +331,10 @@ class $MaterialsTable extends Materials
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      quantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}quantity'])!,
+      unit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -382,21 +349,22 @@ class $MaterialsTable extends Materials
 class MaterialItem extends DataClass implements Insertable<MaterialItem> {
   final int id;
   final String name;
-  final String? description;
+  final double quantity;
+  final String unit;
   final DateTime createdAt;
   const MaterialItem(
       {required this.id,
       required this.name,
-      this.description,
+      required this.quantity,
+      required this.unit,
       required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
-    if (!nullToAbsent || description != null) {
-      map['description'] = Variable<String>(description);
-    }
+    map['quantity'] = Variable<double>(quantity);
+    map['unit'] = Variable<String>(unit);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -405,9 +373,8 @@ class MaterialItem extends DataClass implements Insertable<MaterialItem> {
     return MaterialsCompanion(
       id: Value(id),
       name: Value(name),
-      description: description == null && nullToAbsent
-          ? const Value.absent()
-          : Value(description),
+      quantity: Value(quantity),
+      unit: Value(unit),
       createdAt: Value(createdAt),
     );
   }
@@ -418,7 +385,8 @@ class MaterialItem extends DataClass implements Insertable<MaterialItem> {
     return MaterialItem(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      description: serializer.fromJson<String?>(json['description']),
+      quantity: serializer.fromJson<double>(json['quantity']),
+      unit: serializer.fromJson<String>(json['unit']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -428,7 +396,8 @@ class MaterialItem extends DataClass implements Insertable<MaterialItem> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'description': serializer.toJson<String?>(description),
+      'quantity': serializer.toJson<double>(quantity),
+      'unit': serializer.toJson<String>(unit),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -436,20 +405,22 @@ class MaterialItem extends DataClass implements Insertable<MaterialItem> {
   MaterialItem copyWith(
           {int? id,
           String? name,
-          Value<String?> description = const Value.absent(),
+          double? quantity,
+          String? unit,
           DateTime? createdAt}) =>
       MaterialItem(
         id: id ?? this.id,
         name: name ?? this.name,
-        description: description.present ? description.value : this.description,
+        quantity: quantity ?? this.quantity,
+        unit: unit ?? this.unit,
         createdAt: createdAt ?? this.createdAt,
       );
   MaterialItem copyWithCompanion(MaterialsCompanion data) {
     return MaterialItem(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
-      description:
-          data.description.present ? data.description.value : this.description,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      unit: data.unit.present ? data.unit.value : this.unit,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -459,51 +430,59 @@ class MaterialItem extends DataClass implements Insertable<MaterialItem> {
     return (StringBuffer('MaterialItem(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('description: $description, ')
+          ..write('quantity: $quantity, ')
+          ..write('unit: $unit, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, description, createdAt);
+  int get hashCode => Object.hash(id, name, quantity, unit, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is MaterialItem &&
           other.id == this.id &&
           other.name == this.name &&
-          other.description == this.description &&
+          other.quantity == this.quantity &&
+          other.unit == this.unit &&
           other.createdAt == this.createdAt);
 }
 
 class MaterialsCompanion extends UpdateCompanion<MaterialItem> {
   final Value<int> id;
   final Value<String> name;
-  final Value<String?> description;
+  final Value<double> quantity;
+  final Value<String> unit;
   final Value<DateTime> createdAt;
   const MaterialsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    this.description = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.unit = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
   MaterialsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
-    this.description = const Value.absent(),
+    this.quantity = const Value.absent(),
+    required String unit,
     this.createdAt = const Value.absent(),
-  }) : name = Value(name);
+  })  : name = Value(name),
+        unit = Value(unit);
   static Insertable<MaterialItem> custom({
     Expression<int>? id,
     Expression<String>? name,
-    Expression<String>? description,
+    Expression<double>? quantity,
+    Expression<String>? unit,
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
-      if (description != null) 'description': description,
+      if (quantity != null) 'quantity': quantity,
+      if (unit != null) 'unit': unit,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
@@ -511,12 +490,14 @@ class MaterialsCompanion extends UpdateCompanion<MaterialItem> {
   MaterialsCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
-      Value<String?>? description,
+      Value<double>? quantity,
+      Value<String>? unit,
       Value<DateTime>? createdAt}) {
     return MaterialsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
-      description: description ?? this.description,
+      quantity: quantity ?? this.quantity,
+      unit: unit ?? this.unit,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -530,8 +511,11 @@ class MaterialsCompanion extends UpdateCompanion<MaterialItem> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
+    if (quantity.present) {
+      map['quantity'] = Variable<double>(quantity.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -544,7 +528,8 @@ class MaterialsCompanion extends UpdateCompanion<MaterialItem> {
     return (StringBuffer('MaterialsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('description: $description, ')
+          ..write('quantity: $quantity, ')
+          ..write('unit: $unit, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();

@@ -13,7 +13,8 @@ class MaterialRepositoryImpl implements IMaterialRepository {
     return Material(
       id: dbMaterial.id,
       name: dbMaterial.name,
-      description: dbMaterial.description,
+      quantity: dbMaterial.quantity,
+      unit: dbMaterial.unit,
       createdAt: dbMaterial.createdAt,
     );
   }
@@ -22,7 +23,8 @@ class MaterialRepositoryImpl implements IMaterialRepository {
     return db.MaterialsCompanion(
       id: Value(material.id),
       name: Value(material.name),
-      description: Value(material.description),
+      quantity: Value(material.quantity),
+      unit: Value(material.unit),
       createdAt: Value(material.createdAt),
     );
   }
@@ -31,7 +33,8 @@ class MaterialRepositoryImpl implements IMaterialRepository {
   Future<int> addMaterial(AddMaterialParams params) {
     final companion = db.MaterialsCompanion.insert(
       name: params.name,
-      description: Value(params.description),
+      quantity: Value(params.quantity),
+      unit: params.unit,
     );
     return _materialsDao.insertMaterial(companion);
   }
