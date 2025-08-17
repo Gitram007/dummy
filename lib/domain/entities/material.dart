@@ -47,5 +47,23 @@ class Material {
       createdAt: createdAt ?? this.createdAt,
     );
   }
+
+  factory Material.fromJson(Map<String, dynamic> json) {
+    return Material(
+      id: json['id'],
+      name: json['name'],
+      quantity: (json['quantity'] as num).toDouble(),
+      unit: json['unit'],
+      createdAt: DateTime.parse(json['created_at']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'quantity': quantity,
+      'unit': unit,
+    };
+  }
 }
 

@@ -4,4 +4,10 @@ class AddProductParams {
   const AddProductParams({
     required this.name,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+    };
+  }
 }

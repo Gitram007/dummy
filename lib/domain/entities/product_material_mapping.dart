@@ -27,4 +27,35 @@ class ProductMaterialMapping {
       materialId.hashCode ^
       quantity.hashCode ^
       assignedAt.hashCode;
+
+  ProductMaterialMapping copyWith({
+    int? productId,
+    int? materialId,
+    double? quantity,
+    DateTime? assignedAt,
+  }) {
+    return ProductMaterialMapping(
+      productId: productId ?? this.productId,
+      materialId: materialId ?? this.materialId,
+      quantity: quantity ?? this.quantity,
+      assignedAt: assignedAt ?? this.assignedAt,
+    );
+  }
+
+  factory ProductMaterialMapping.fromJson(Map<String, dynamic> json) {
+    return ProductMaterialMapping(
+      productId: json['product'],
+      materialId: json['material'],
+      quantity: (json['quantity'] as num).toDouble(),
+      assignedAt: DateTime.parse(json['assigned_at']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'product': productId,
+      'material': materialId,
+      'quantity': quantity,
+    };
+  }
 }

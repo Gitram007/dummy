@@ -8,4 +8,12 @@ class AddMaterialParams {
     required this.quantity,
     required this.unit,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'quantity': quantity,
+      'unit': unit,
+    };
+  }
 }

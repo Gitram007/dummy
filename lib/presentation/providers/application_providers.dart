@@ -1,23 +1,10 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Data sources
-import '../../data/local/database.dart' as db;
-import '../../data/datasource/remote/api_client.dart';
-import '../../data/datasource/remote/mock_api_client.dart';
-
-// Repository Implementations (Mobile)
-import '../../data/repositories/material_repository_impl.dart';
-import '../../data/repositories/product_material_repository_impl.dart';
-import '../../data/repositories/product_repository_impl.dart';
-import '../../data/repositories/product_log_repository_impl.dart';
-
-// Repository Implementations (Web)
-import '../../data/repositories/material_repository_web_impl.dart';
-import '../../data/repositories/product_material_repository_web_impl.dart';
-import '../../data/repositories/product_repository_web_impl.dart';
-import '../../data/repositories/product_log_repository_web_impl.dart';
-
+// Repository Implementations (API)
+import '../../data/repositories/material_repository_api_impl.dart';
+import '../../data/repositories/product_material_repository_api_impl.dart';
+import '../../data/repositories/product_repository_api_impl.dart';
+import '../../data/repositories/production_log_repository_api_impl.dart';
 
 // Domain
 import '../../domain/entities/product.dart';
@@ -30,60 +17,24 @@ import '../../domain/repositories/production_log_repository.dart';
 import '../../domain/services/report_service.dart';
 import '../../domain/services/export_service.dart';
 
-// --- DATA SOURCE PROVIDERS ---
-
-// Provider for the local Drift database. Only used on mobile.
-final appDatabaseProvider = Provider<db.AppDatabase>((ref) {
-  if (kIsWeb) {
-    throw UnsupportedError('Drift database is not supported on web.');
-  }
-  return db.AppDatabase();
-});
-
-// Provider for the REST API client. A singleton mock instance is used.
-final apiClientProvider = Provider<ApiClient>((ref) {
-  return MockApiClient();
-});
-
-
-// --- REPOSITORY PROVIDERS (Conditional) ---
+// --- REPOSITORY PROVIDERS ---
 
 final productRepositoryProvider = Provider<IProductRepository>((ref) {
-  if (kIsWeb) {
-    return ProductRepositoryWebImpl(ref.watch(apiClientProvider));
-  } else {
-    final dao = ref.watch(appDatabaseProvider).productsDao;
-    return ProductRepositoryImpl(dao);
-  }
+  return ProductRepositoryApiImpl();
 });
 
 final materialRepositoryProvider = Provider<IMaterialRepository>((ref) {
-  if (kIsWeb) {
-    return MaterialRepositoryWebImpl(ref.watch(apiClientProvider));
-  } else {
-    final dao = ref.watch(appDatabaseProvider).materialsDao;
-    return MaterialRepositoryImpl(dao);
-  }
+  return MaterialRepositoryApiImpl();
 });
 
 final productMaterialRepositoryProvider =
-Provider<IProductMaterialRepository>((ref) {
-  if (kIsWeb) {
-    return ProductMaterialRepositoryWebImpl(ref.watch(apiClientProvider));
-  } else {
-    final dao = ref.watch(appDatabaseProvider).productMaterialsDao;
-    return ProductMaterialRepositoryImpl(dao);
-  }
+    Provider<IProductMaterialRepository>((ref) {
+  return ProductMaterialRepositoryApiImpl();
 });
 
 final productionLogRepositoryProvider =
-Provider<IProductionLogRepository>((ref) {
-  if (kIsWeb) {
-    return ProductionLogRepositoryWebImpl(ref.watch(apiClientProvider));
-  } else {
-    final dao = ref.watch(appDatabaseProvider).productionLogsDao;
-    return ProductionLogRepositoryImpl(dao);
-  }
+    Provider<IProductionLogRepository>((ref) {
+  return ProductionLogRepositoryApiImpl();
 });
 
 

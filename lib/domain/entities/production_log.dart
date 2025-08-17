@@ -27,4 +27,21 @@ class ProductionLog {
       productId.hashCode ^
       quantityProduced.hashCode ^
       productionDate.hashCode;
+
+  factory ProductionLog.fromJson(Map<String, dynamic> json) {
+    return ProductionLog(
+      id: json['id'],
+      productId: json['product'],
+      quantityProduced: (json['quantity_produced'] as num).toDouble(),
+      productionDate: DateTime.parse(json['production_date']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'product': productId,
+      'quantity_produced': quantityProduced,
+      'production_date': productionDate.toIso8601String(),
+    };
+  }
 }
